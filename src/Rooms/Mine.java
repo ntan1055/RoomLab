@@ -24,6 +24,4 @@ public class Mine extends Room2
         System.out.println("The mine you stepped on suddenly sent you back to the starting point.");
         Runner.mineReset();
     }
-
-
 }
