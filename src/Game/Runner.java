@@ -1,9 +1,8 @@
 package Game;
 
 import People.Person;
-import Rooms.Room;
-import Rooms.WinningRoom;
-	
+import Rooms.*;
+
 import java.util.Scanner;
 
 public class Runner {
@@ -115,11 +114,132 @@ public class Runner {
 		}
 		return true;
 	}
+
+	public static boolean validMove(String move, Person p, Room2[][] map)
+	{
+		move = move.toLowerCase().trim();
+		switch (move) {
+			case "n":
+				if (p.getxLoc() > 0)
+				{
+					map[p.getxLoc()][p.getyLoc()].leaveRoom(p);
+					map[p.getxLoc()-1][p.getyLoc()].enterRoom(p);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			case "e":
+				if (p.getyLoc()< map[p.getyLoc()].length -1)
+				{
+					map[p.getxLoc()][p.getyLoc()].leaveRoom(p);
+					map[p.getxLoc()][p.getyLoc() + 1].enterRoom(p);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			case "s":
+				if (p.getxLoc() < map.length - 1)
+				{
+					map[p.getxLoc()][p.getyLoc()].leaveRoom(p);
+					map[p.getxLoc()+1][p.getyLoc()].enterRoom(p);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+
+			case "w":
+				if (p.getyLoc() > 0)
+				{
+					map[p.getxLoc()][p.getyLoc()].leaveRoom(p);
+					map[p.getxLoc()][p.getyLoc()-1].enterRoom(p);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			default:
+				break;
+
+		}
+		return true;
+	}
+
+	public static void teleport()
+	{
+		Person player2 = new Person("FirstName", "FamilyName", 0,0);
+		Scanner in = new Scanner(System.in);
+		while(gameOn)
+		{
+			Room2[][] Room2 = new Room2[5][5];
+			for (int x = 0; x<Room2.length; x++)
+			{
+				for (int y = 0; y < Room2[x].length; y++)
+				{
+					Room2[x][y] = new Room2(x,y);
+				}
+			}
+            int x = (int)(Math.random()*Room2.length);
+            int y = (int)(Math.random()*Room2.length);
+            Room2[x][y] = new Mine(x, y);
+            int x1 = (int)(Math.random()*Room2.length);
+            int y1 = (int)(Math.random()*Room2.length);
+            Room2[x][y] = new Mine(x1, y1);
+			System.out.println("Where would you like to move? (Choose N, S, E, W)");
+			String move = in.nextLine();
+			if(validMove(move, player2, Room2))
+			{
+				System.out.println("Your coordinates: row = " + player2.getxLoc() + " col = " + player2.getyLoc());
+			}
+			else
+			{
+				System.out.println("Please choose a valid move.");
+			}
+		}
+		in.close();
+	}
+
+	public static void mineReset()
+	{
+        Person player2 = new Person("FirstName", "FamilyName", 0,0);
+        Scanner in = new Scanner(System.in);
+        while(gameOn)
+        {
+            Room2[][] Room2 = new Room2[5][5];
+            for (int x = 0; x<Room2.length; x++)
+            {
+                for (int y = 0; y < Room2[x].length; y++)
+                {
+                    Room2[x][y] = new Room2(x,y);
+                }
+            }
+            int x = (int)(Math.random()*Room2.length);
+            int y = (int)(Math.random()*Room2.length);
+            Room2[x][y] = new Mine(x, y);
+            Room2[4][4] = new Exit(4, 4);
+            System.out.println("Where would you like to move? (Choose N, S, E, W)");
+            String move = in.nextLine();
+            if(validMove(move, player2, Room2))
+            {
+                System.out.println("Your coordinates: row = " + player2.getxLoc() + " col = " + player2.getyLoc());
+            }
+            else
+            {
+                System.out.println("Please choose a valid move.");
+            }
+        }
+        in.close();
+	}
+
 	public static void gameOff()
 	{
 		gameOn = false;
 	}
-	
-
-
 }
